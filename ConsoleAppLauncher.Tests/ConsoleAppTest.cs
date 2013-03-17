@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using SlavaGu.ConsoleAppLauncher;
 
-namespace SlavaGu.ConsoleAppLauncher.Tests
+namespace ConsoleAppLauncher.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ConsoleAppTest
     {
-        private IConsoleApp GetDummyApp(string outputLine, int repeat, int delay, bool unstoppable)
+        private static IConsoleApp GetDummyApp(string outputLine, int repeat, int delay, bool unstoppable)
         {
-            var fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DummyConsoleApplication.exe");
             var cmdLine = string.Format("-output=\"{0}\" -repeat={1} -delay={2} -unstoppable={3}", outputLine, repeat, delay, unstoppable);
-            var app = new ConsoleApp(fileName, cmdLine);
-            return app;
+            return new ConsoleApp("DummyConsoleApplication.exe", cmdLine);
         }
 
-        [TestMethod]
+        [Test]
         public void should_get_all_lines_with_slow_console_output()
         {
             // Arrange
@@ -39,10 +37,11 @@ namespace SlavaGu.ConsoleAppLauncher.Tests
 
             // Assert
             Assert.IsTrue(exited, "App hasn't exited within allowed timeout");
+            Assert.AreEqual(0, app.ExitCode, "Unexpected exit code");
             Assert.IsTrue(expected.SequenceEqual(actual), "Captured output is not as expected");
         }
 
-        [TestMethod]
+        [Test]
         public void should_get_all_lines_with_fast_console_output()
         {
             // Arrange
@@ -62,10 +61,11 @@ namespace SlavaGu.ConsoleAppLauncher.Tests
 
             // Assert
             Assert.IsTrue(exited, "App hasn't exited within allowed timeout");
+            Assert.AreEqual(0, app.ExitCode, "Unexpected exit code");
             Assert.IsTrue(expected.SequenceEqual(actual), "Captured output is not as expected");
         }
 
-        [TestMethod]
+        [Test]
         public void should_stop_properly_while_running()
         {
             // Arrange
@@ -81,17 +81,17 @@ namespace SlavaGu.ConsoleAppLauncher.Tests
             // Act
             app.Run();
             Thread.Sleep(500);
-            app.Stop();
+            app.Stop(500, ConsoleSpecialKey.ControlBreak);
             var exited = app.WaitForExit(10000);
 
             // Assert
             Assert.IsTrue(exited, "App hasn't exited within allowed timeout");
-            Assert.AreEqual(-1073741510, app.ExitCode, "App should have been terminated by CTRL-C");
+            Assert.AreEqual(-1, app.ExitCode, "App should have been terminated by CTRL-C");
             Assert.IsTrue(actual.Any(), "No output captured");
             Assert.AreNotEqual(repeat, actual.Count(), "App hasn't been stopped");
         }
 
-        [TestMethod]
+        [Test]
         public void should_abort_if_nonstoppable()
         {
             // Arrange

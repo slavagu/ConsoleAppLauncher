@@ -7,6 +7,14 @@ namespace DummyConsoleApplication
 {
     public class Program
     {
+        public enum ExitCode
+        {
+            Success = 0,
+            AbortedWithCtrlC = 1,
+            AbortedWithCtrlBreak = 2,
+            Unexpected = 3,
+        }
+
         static void Main(string[] args)
         {
             string outputLine = null;
@@ -40,14 +48,28 @@ namespace DummyConsoleApplication
 
             Console.CancelKeyPress += (sender, e) =>
             {
-                Console.WriteLine("{0} key pressed, {1}...", e.SpecialKey.ToString(), unstoppable ? "ignoring" : "exiting");
-                try
+                if (e.SpecialKey == ConsoleSpecialKey.ControlC)
                 {
-                    e.Cancel = unstoppable;
+                    if (unstoppable)
+                    {
+                        Console.WriteLine("Ctrl-C pressed, ignoring...");
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ctrl-C pressed, exiting...");
+                        Environment.Exit((int)ExitCode.AbortedWithCtrlC);
+                    }
                 }
-                catch (Exception ex)
+                else if (e.SpecialKey == ConsoleSpecialKey.ControlBreak)
                 {
-                    Console.WriteLine("Could not ignore: {0}", ex.ToString());
+                    Console.WriteLine("Ctrl-Break pressed, can't avoid exiting...");
+                    Environment.Exit((int)ExitCode.AbortedWithCtrlBreak);
+                }
+                else
+                {
+                    Console.WriteLine("Unexpected signal {0} received, exiting...", e.SpecialKey.ToString());
+                    Environment.Exit((int)ExitCode.Unexpected);
                 }
             };
 
@@ -59,6 +81,8 @@ namespace DummyConsoleApplication
                     Thread.Sleep(delay);
                 }
             }
+
+            Environment.Exit((int)ExitCode.Success);
         }
 
     }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="D:\SOURCES\GitHub\ConsoleAppLauncher\ConsoleAppLauncher.Tests\bin\Release\ConsoleAppLauncher.Tests.dll" total="4" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2013-03-17" time="23:18:42">
+  <environment nunit-version="2.6.2.12296" clr-version="2.0.50727.5466" os-version="Microsoft Windows NT 6.1.7601 Service Pack 1" platform="Win32NT" cwd="D:\SOURCES\GitHub\ConsoleAppLauncher" machine-name="SONATA" user="Slava" user-domain="Sonata" />
+  <culture-info current-culture="en-AU" current-uiculture="en-US" />
+  <test-suite type="Assembly" name="D:\SOURCES\GitHub\ConsoleAppLauncher\ConsoleAppLauncher.Tests\bin\Release\ConsoleAppLauncher.Tests.dll" executed="True" result="Success" success="True" time="3.408" asserts="0">
+    <results>
+      <test-suite type="Namespace" name="ConsoleAppLauncher" executed="True" result="Success" success="True" time="3.396" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="Tests" executed="True" result="Success" success="True" time="3.396" asserts="0">
+            <results>
+              <test-suite type="TestFixture" name="ConsoleAppTest" executed="True" result="Success" success="True" time="3.395" asserts="0">
+                <results>
+                  <test-case name="ConsoleAppLauncher.Tests.ConsoleAppTest.should_abort_if_nonstoppable" executed="True" result="Success" success="True" time="1.162" asserts="4" />
+                  <test-case name="ConsoleAppLauncher.Tests.ConsoleAppTest.should_get_all_lines_with_fast_console_output" executed="True" result="Success" success="True" time="0.095" asserts="3" />
+                  <test-case name="ConsoleAppLauncher.Tests.ConsoleAppTest.should_get_all_lines_with_slow_console_output" executed="True" result="Success" success="True" time="1.101" asserts="3" />
+                  <test-case name="ConsoleAppLauncher.Tests.ConsoleAppTest.should_stop_properly_while_running" executed="True" result="Success" success="True" time="1.014" asserts="4" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

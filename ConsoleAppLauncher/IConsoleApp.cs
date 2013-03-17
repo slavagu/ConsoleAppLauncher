@@ -50,7 +50,8 @@ namespace SlavaGu.ConsoleAppLauncher
         /// Stop the app.
         /// </summary>
         /// <param name="forceCloseMillisecondsTimeout">Timeout to wait before closing the app forcefully [default=infinite]</param>
-        void Stop(int forceCloseMillisecondsTimeout = Timeout.Infinite);
+        /// <param name="forceCloseKey">Special key to send if closing the app forcefully [default=Ctrl-C]</param>
+        void Stop(int forceCloseMillisecondsTimeout = Timeout.Infinite, ConsoleSpecialKey forceCloseKey = ConsoleSpecialKey.ControlC);
 
         /// <summary>
         /// Wait until the app exits.

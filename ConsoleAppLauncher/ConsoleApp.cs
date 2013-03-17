@@ -77,7 +77,8 @@ namespace SlavaGu.ConsoleAppLauncher
         /// Stop the app.
         /// </summary>
         /// <param name="forceCloseMillisecondsTimeout">Timeout to wait before closing the app forcefully [default=infinite]</param>
-        public void Stop(int forceCloseMillisecondsTimeout = Timeout.Infinite)
+        /// <param name="forceCloseKey">Special key to send if closing the app forcefully [default=Ctrl-C]</param>
+        public void Stop(int forceCloseMillisecondsTimeout = Timeout.Infinite, ConsoleSpecialKey forceCloseKey = ConsoleSpecialKey.ControlC)
         {
             if (_disposed)
                 throw new ObjectDisposedException("Object was disposed.");
@@ -92,7 +93,8 @@ namespace SlavaGu.ConsoleAppLauncher
 
                 State = AppState.Exiting;
 
-                Task.Factory.StartNew(() => CloseConsole(forceCloseMillisecondsTimeout), TaskCreationOptions.LongRunning);
+                Task.Factory.StartNew(() => CloseConsole(forceCloseMillisecondsTimeout, forceCloseKey), 
+                    TaskCreationOptions.LongRunning);
             }
         }
 
@@ -236,7 +238,7 @@ namespace SlavaGu.ConsoleAppLauncher
             }
         }
 
-        private void CloseConsole(int forceCloseMillisecondsTimeout)
+        private void CloseConsole(int forceCloseMillisecondsTimeout, ConsoleSpecialKey forceCloseKey)
         {
             if (_process == null || _process.HasExited)
                 return;
@@ -247,10 +249,11 @@ namespace SlavaGu.ConsoleAppLauncher
             if (_process == null || _process.HasExited)
                 return;
 
-            Debug.WriteLine("Trying to close app gracefully by sending Ctrl-C signal");
+            Debug.WriteLine("Trying to close the app gracefully by sending " + forceCloseKey);
             Win32.AttachConsole((uint)_process.Id);
             Win32.SetConsoleCtrlHandler(_consoleCtrlEventHandler, true);
-            Win32.GenerateConsoleCtrlEvent(Win32.CtrlType.CtrlCEvent, 0);
+            var ctrlType = forceCloseKey == ConsoleSpecialKey.ControlC ? Win32.CtrlType.CtrlCEvent : Win32.CtrlType.CtrlBreakEvent;
+            Win32.GenerateConsoleCtrlEvent(ctrlType, 0);
 
             if (_process == null || _process.HasExited)
                 return;
@@ -341,7 +344,7 @@ namespace SlavaGu.ConsoleAppLauncher
             {
                 if (disposing)
                 {
-                    CloseConsole(500);
+                    CloseConsole(500, ConsoleSpecialKey.ControlBreak);
                     WaitForExit(500);
                     FreeProcessResources();
                 }
