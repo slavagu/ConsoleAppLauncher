@@ -76,9 +76,9 @@ namespace SlavaGu.ConsoleAppLauncher
         /// <summary>
         /// Stop the app.
         /// </summary>
+        /// <param name="closeKey">Special key to send to close the app [default=Ctrl-C]</param>
         /// <param name="forceCloseMillisecondsTimeout">Timeout to wait before closing the app forcefully [default=infinite]</param>
-        /// <param name="forceCloseKey">Special key to send if closing the app forcefully [default=Ctrl-C]</param>
-        public void Stop(int forceCloseMillisecondsTimeout = Timeout.Infinite, ConsoleSpecialKey forceCloseKey = ConsoleSpecialKey.ControlC)
+        public void Stop(ConsoleSpecialKey closeKey = ConsoleSpecialKey.ControlC, int forceCloseMillisecondsTimeout = Timeout.Infinite)
         {
             if (_disposed)
                 throw new ObjectDisposedException("Object was disposed.");
@@ -93,7 +93,7 @@ namespace SlavaGu.ConsoleAppLauncher
 
                 State = AppState.Exiting;
 
-                Task.Factory.StartNew(() => CloseConsole(forceCloseMillisecondsTimeout, forceCloseKey), 
+                Task.Factory.StartNew(() => CloseConsole(closeKey, forceCloseMillisecondsTimeout), 
                     TaskCreationOptions.LongRunning);
             }
         }
@@ -110,11 +110,11 @@ namespace SlavaGu.ConsoleAppLauncher
 
             if (State == AppState.Undefined || _processMonitor == null)
             {
-                Debug.WriteLine("App hasn't started yet");
+                Trace.TraceWarning("App hasn't started yet");
                 return true;
             }
 
-            Debug.WriteLine("Waiting until the app exits: Timeout={0}", millisecondsTimeout);
+            Trace.TraceInformation("Waiting until the app exits: Timeout={0}", millisecondsTimeout);
             return _processMonitor.Wait(millisecondsTimeout);
         }
 
@@ -148,7 +148,7 @@ namespace SlavaGu.ConsoleAppLauncher
 
             try
             {
-                Debug.WriteLine("Starting app: FileName='{0}', CmdLine={1}", FileName, CmdLine);
+                Trace.TraceInformation("Starting app: FileName='{0}', CmdLine={1}", FileName, CmdLine);
 
                 _processEvent = new AutoResetEvent(false);
                 _consoleOutputQueue = new ConcurrentQueue<ConsoleOutputEventArgs>();
@@ -169,7 +169,7 @@ namespace SlavaGu.ConsoleAppLauncher
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Could not start app: FileName='{0}', Error={1}", FileName, ex);
+                Trace.TraceError("Could not start app: FileName='{0}', Error={1}", FileName, ex);
 
                 FreeProcessResources();
                 if (_cancellationTokenSource != null)
@@ -208,14 +208,14 @@ namespace SlavaGu.ConsoleAppLauncher
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("OnConsoleOutput exception ignored: FileName='{0}', Error={1}", FileName, ex);
+                    Trace.TraceError("OnConsoleOutput exception ignored: FileName='{0}', Error={1}", FileName, ex);
                 }
             }
         }
 
         private void HandleProcessExit()
         {
-            Debug.WriteLine("Handling app exit");
+            Trace.TraceInformation("Handling app exit");
 
             if (_process == null)
                 return;
@@ -234,36 +234,36 @@ namespace SlavaGu.ConsoleAppLauncher
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("OnExited exception ignored: FileName='{0}', Error={1}", FileName, ex);
+                Trace.TraceError("OnExited exception ignored: FileName='{0}', Error={1}", FileName, ex);
             }
         }
 
-        private void CloseConsole(int forceCloseMillisecondsTimeout, ConsoleSpecialKey forceCloseKey)
+        private void CloseConsole(ConsoleSpecialKey closeKey, int forceCloseMillisecondsTimeout)
         {
             if (_process == null || _process.HasExited)
                 return;
 
-            Debug.WriteLine("Closing app input by sending Ctrl-Z signal");
+            Trace.TraceInformation("Closing app input by sending Ctrl-Z signal");
             _process.StandardInput.Close();
 
             if (_process == null || _process.HasExited)
                 return;
 
-            Debug.WriteLine("Trying to close the app gracefully by sending " + forceCloseKey);
+            Trace.TraceInformation("Trying to close the app gracefully by sending " + closeKey);
             Win32.AttachConsole((uint)_process.Id);
             Win32.SetConsoleCtrlHandler(_consoleCtrlEventHandler, true);
-            var ctrlType = forceCloseKey == ConsoleSpecialKey.ControlC ? Win32.CtrlType.CtrlCEvent : Win32.CtrlType.CtrlBreakEvent;
+            var ctrlType = closeKey == ConsoleSpecialKey.ControlC ? Win32.CtrlType.CtrlCEvent : Win32.CtrlType.CtrlBreakEvent;
             Win32.GenerateConsoleCtrlEvent(ctrlType, 0);
 
             if (_process == null || _process.HasExited)
                 return;
 
             // close console forcefully if not finished within allowed timeout
-            Debug.WriteLine("Waiting for exit: Timeout={0}", forceCloseMillisecondsTimeout);
+            Trace.TraceInformation("Waiting for app exit: Timeout={0}", forceCloseMillisecondsTimeout);
             var exited = _process.WaitForExit(forceCloseMillisecondsTimeout);
             if (!exited)
             {
-                Debug.WriteLine("Closing app forcefully");
+                Trace.TraceWarning("Closing app forcefully");
                 _process.Kill();
             }
         }
@@ -311,7 +311,7 @@ namespace SlavaGu.ConsoleAppLauncher
             if (e.Line == null)
                 return;
 
-            Debug.WriteLine("Console output: Line='{0}', IsError={1}", e.Line, e.IsError);
+            Trace.TraceInformation("Console output: Line='{0}', IsError={1}", e.Line, e.IsError);
 
             var handler = ConsoleOutput;
             if (handler != null)
@@ -320,7 +320,7 @@ namespace SlavaGu.ConsoleAppLauncher
 
         protected virtual void OnExited(EventArgs e)
         {
-            Debug.WriteLine("App exited: FileName='{0}', ExitCode={1}, ExitTime={2}", FileName, ExitCode, ExitTime);
+            Trace.TraceInformation("App exited: FileName='{0}', ExitCode={1}, ExitTime={2}", FileName, ExitCode, ExitTime);
             
             var handler = Exited;
             if (handler != null)
@@ -344,7 +344,7 @@ namespace SlavaGu.ConsoleAppLauncher
             {
                 if (disposing)
                 {
-                    CloseConsole(500, ConsoleSpecialKey.ControlBreak);
+                    CloseConsole(ConsoleSpecialKey.ControlBreak, 500);
                     WaitForExit(500);
                     FreeProcessResources();
                 }

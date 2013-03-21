@@ -81,7 +81,7 @@ namespace ConsoleAppLauncher.Tests
             // Act
             app.Run();
             Thread.Sleep(500);
-            app.Stop(500, ConsoleSpecialKey.ControlBreak);
+            app.Stop(ConsoleSpecialKey.ControlC, 500);
             var exited = app.WaitForExit(10000);
 
             // Assert
@@ -107,7 +107,7 @@ namespace ConsoleAppLauncher.Tests
             // Act
             app.Run();
             Thread.Sleep(500);
-            app.Stop(500);
+            app.Stop(ConsoleSpecialKey.ControlC, 500);
             var exited = app.WaitForExit(10000);
 
             // Assert
