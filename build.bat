@@ -1,6 +1,6 @@
 @echo off
 pushd %~dp0
-if "%WindowsSdkDir%" == "" do call "%VS100COMNTOOLS%\vsvars32.bat"
+if "%WindowsSdkDir%" == "" call "%VS100COMNTOOLS%\vsvars32.bat"
 
 if "%BUILD_CONFIG%" == "" set BUILD_CONFIG=Debug
 
