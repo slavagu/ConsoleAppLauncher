@@ -8,7 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1DFE3034-7ABE-4AD1-ACFA-AEC9484A84F0}"
 	ProjectSection(SolutionItems) = preProject
 		build.bat = build.bat
+		build_release.bat = build_release.bat
 		license.txt = license.txt
+		publish.bat = publish.bat
 		readme.md = readme.md
 	EndProjectSection
 EndProject
@@ -16,6 +18,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyConsoleApplication", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{93B03F2E-1973-4341-9A85-EDDA196F9F24}"
 	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
