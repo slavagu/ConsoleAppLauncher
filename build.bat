@@ -1,8 +1,8 @@
 @echo off
 pushd %~dp0
-call "%VS100COMNTOOLS%\vsvars32.bat"
+if "%WindowsSdkDir%" == "" do call "%VS100COMNTOOLS%\vsvars32.bat"
 
-if "BUILD_CONFIG"=="" set BUILD_CONFIG=Debug
+if "%BUILD_CONFIG%" == "" set BUILD_CONFIG=Debug
 
 echo Building %BUILD_CONFIG%...
 msbuild.exe ConsoleAppLauncher.sln /t:Rebuild /p:Configuration=%BUILD_CONFIG%
