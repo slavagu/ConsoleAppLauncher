@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{93B03F
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppLauncher.Samples", "ConsoleAppLauncher.Samples\ConsoleAppLauncher.Samples.csproj", "{E752D3D4-9A35-404F-9A03-308115D93A11}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ConsoleAppLauncher.vsmdi
@@ -68,6 +70,16 @@ Global
 		{D4694E4B-E8C9-42BA-9566-70CA8BE11F58}.Release|Mixed Platforms.Build.0 = Release|x86
 		{D4694E4B-E8C9-42BA-9566-70CA8BE11F58}.Release|x86.ActiveCfg = Release|x86
 		{D4694E4B-E8C9-42BA-9566-70CA8BE11F58}.Release|x86.Build.0 = Release|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Debug|x86.ActiveCfg = Debug|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Debug|x86.Build.0 = Debug|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Release|Any CPU.ActiveCfg = Release|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Release|x86.ActiveCfg = Release|x86
+		{E752D3D4-9A35-404F-9A03-308115D93A11}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
