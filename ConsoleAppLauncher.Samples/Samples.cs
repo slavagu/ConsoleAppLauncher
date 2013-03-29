@@ -25,5 +25,10 @@ namespace SlavaGu.ConsoleAppLauncher.Samples
             SysInfo.PingUrl("google.com", reply => BeginInvoke((MethodInvoker)delegate { labelPing.Text = reply; }));
         }
 
+        private void buttonSkype_Click(object sender, EventArgs e)
+        {
+            labelSkype.Text = SysInfo.GetFirewallRule("Skype");
+        }
+
     }
 }

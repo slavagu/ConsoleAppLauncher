@@ -34,6 +34,8 @@
             this.labelPing = new System.Windows.Forms.Label();
             this.buttonVer = new System.Windows.Forms.Button();
             this.labelVer = new System.Windows.Forms.Label();
+            this.buttonSkype = new System.Windows.Forms.Button();
+            this.labelSkype = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonGetIpAddress
@@ -93,11 +95,32 @@
             this.labelVer.TabIndex = 1;
             this.labelVer.Text = "<windows version>";
             // 
+            // buttonSkype
+            // 
+            this.buttonSkype.Location = new System.Drawing.Point(13, 102);
+            this.buttonSkype.Name = "buttonSkype";
+            this.buttonSkype.Size = new System.Drawing.Size(129, 23);
+            this.buttonSkype.TabIndex = 6;
+            this.buttonSkype.Text = "Get Skype Firewall rule";
+            this.buttonSkype.UseVisualStyleBackColor = true;
+            this.buttonSkype.Click += new System.EventHandler(this.buttonSkype_Click);
+            // 
+            // labelSkype
+            // 
+            this.labelSkype.AutoSize = true;
+            this.labelSkype.Location = new System.Drawing.Point(148, 107);
+            this.labelSkype.Name = "labelSkype";
+            this.labelSkype.Size = new System.Drawing.Size(102, 13);
+            this.labelSkype.TabIndex = 7;
+            this.labelSkype.Text = "<skype firewall rule>";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(438, 265);
+            this.ClientSize = new System.Drawing.Size(534, 332);
+            this.Controls.Add(this.labelSkype);
+            this.Controls.Add(this.buttonSkype);
             this.Controls.Add(this.labelVer);
             this.Controls.Add(this.buttonVer);
             this.Controls.Add(this.labelPing);
@@ -119,6 +142,8 @@
         private System.Windows.Forms.Label labelPing;
         private System.Windows.Forms.Button buttonVer;
         private System.Windows.Forms.Label labelVer;
+        private System.Windows.Forms.Button buttonSkype;
+        private System.Windows.Forms.Label labelSkype;
     }
 }
 

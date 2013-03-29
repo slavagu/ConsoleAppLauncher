@@ -32,5 +32,11 @@ namespace SlavaGu.ConsoleAppLauncher.Samples
             };
             app.Run();
         }
+
+        public static string GetFirewallRule(string ruleName)
+        {
+            var cmdLine = string.Format("advfirewall firewall show rule \"{0}\" verbose", ruleName);
+            return ConsoleApp.Run("netsh", cmdLine).Output.Trim();
+        }
     }
 }
