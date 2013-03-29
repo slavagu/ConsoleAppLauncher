@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +19,11 @@ namespace SlavaGu.ConsoleAppLauncher
         private readonly object _stateLock = new object();
         private readonly Win32.ConsoleCtrlEventHandler _consoleCtrlEventHandler;
 
+        /// <summary>
+        /// ConsoleApp constructor
+        /// </summary>
+        /// <param name="fileName">File name or DOS command</param>
+        /// <param name="cmdLine">Command-line arguments</param>
         public ConsoleApp(string fileName, string cmdLine)
         {
             FileName = fileName;
@@ -56,8 +62,7 @@ namespace SlavaGu.ConsoleAppLauncher
         /// </summary>
         public void Run()
         {
-            if (_disposed)
-                throw new ObjectDisposedException("Object was disposed.");
+            ThrowIfDisposed();
 
             lock (_stateLock)
             {
@@ -80,8 +85,7 @@ namespace SlavaGu.ConsoleAppLauncher
         /// <param name="forceCloseMillisecondsTimeout">Timeout to wait before closing the app forcefully [default=infinite]</param>
         public void Stop(ConsoleSpecialKey closeKey = ConsoleSpecialKey.ControlC, int forceCloseMillisecondsTimeout = Timeout.Infinite)
         {
-            if (_disposed)
-                throw new ObjectDisposedException("Object was disposed.");
+            ThrowIfDisposed();
 
             lock (_stateLock)
             {
@@ -105,8 +109,7 @@ namespace SlavaGu.ConsoleAppLauncher
         /// <returns>True if exited or False if timeout elapsed</returns>
         public bool WaitForExit(int millisecondsTimeout = Timeout.Infinite)
         {
-            if (_disposed)
-                throw new ObjectDisposedException("Object was disposed.");
+            ThrowIfDisposed();
 
             if (State == AppState.Undefined || _processMonitor == null)
             {
@@ -114,7 +117,10 @@ namespace SlavaGu.ConsoleAppLauncher
                 return true;
             }
 
-            Trace.TraceInformation("Waiting until the app exits: Timeout={0}", millisecondsTimeout);
+            if (_processMonitor.IsCompleted)
+                return true;
+
+            Trace.TraceInformation("Waiting for app exit: Timeout={0}", millisecondsTimeout);
             return _processMonitor.Wait(millisecondsTimeout);
         }
 
@@ -148,7 +154,7 @@ namespace SlavaGu.ConsoleAppLauncher
 
             try
             {
-                Trace.TraceInformation("Starting app: FileName='{0}', CmdLine={1}", FileName, CmdLine);
+                Trace.TraceInformation("Starting app: '{0} {1}'", FileName, CmdLine);
 
                 _processEvent = new AutoResetEvent(false);
                 _consoleOutputQueue = new ConcurrentQueue<ConsoleOutputEventArgs>();
@@ -169,7 +175,7 @@ namespace SlavaGu.ConsoleAppLauncher
             }
             catch (Exception ex)
             {
-                Trace.TraceError("Could not start app: FileName='{0}', Error={1}", FileName, ex);
+                Trace.TraceError("Could not start app: '{0} {1}', Error={2}", FileName, CmdLine, ex);
 
                 FreeProcessResources();
                 if (_cancellationTokenSource != null)
@@ -208,15 +214,13 @@ namespace SlavaGu.ConsoleAppLauncher
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError("OnConsoleOutput exception ignored: FileName='{0}', Error={1}", FileName, ex);
+                    Trace.TraceError("OnConsoleOutput exception ignored: Error={0}", ex.ToString());
                 }
             }
         }
 
         private void HandleProcessExit()
         {
-            Trace.TraceInformation("Handling app exit");
-
             if (_process == null)
                 return;
 
@@ -234,7 +238,7 @@ namespace SlavaGu.ConsoleAppLauncher
             }
             catch (Exception ex)
             {
-                Trace.TraceError("OnExited exception ignored: FileName='{0}', Error={1}", FileName, ex);
+                Trace.TraceError("OnExited exception ignored: Error={0}", ex.ToString());
             }
         }
 
@@ -259,11 +263,11 @@ namespace SlavaGu.ConsoleAppLauncher
                 return;
 
             // close console forcefully if not finished within allowed timeout
-            Trace.TraceInformation("Waiting for app exit: Timeout={0}", forceCloseMillisecondsTimeout);
+            Trace.TraceInformation("Waiting for voluntary app exit: Timeout={0}", forceCloseMillisecondsTimeout);
             var exited = _process.WaitForExit(forceCloseMillisecondsTimeout);
             if (!exited)
             {
-                Trace.TraceWarning("Closing app forcefully");
+                Trace.TraceWarning("Closing the app forcefully");
                 _process.Kill();
             }
         }
@@ -311,7 +315,7 @@ namespace SlavaGu.ConsoleAppLauncher
             if (e.Line == null)
                 return;
 
-            Trace.TraceInformation("Console output: Line='{0}', IsError={1}", e.Line, e.IsError);
+            Trace.TraceInformation("{0}> {1}", e.IsError ? "stderr" : "stdout", e.Line);
 
             var handler = ConsoleOutput;
             if (handler != null)
@@ -320,7 +324,8 @@ namespace SlavaGu.ConsoleAppLauncher
 
         protected virtual void OnExited(EventArgs e)
         {
-            Trace.TraceInformation("App exited: FileName='{0}', ExitCode={1}, ExitTime={2}", FileName, ExitCode, ExitTime);
+            Trace.TraceInformation("App exited: '{0} {1}', ExitCode={2}, ExitTime='{3}'", 
+                FileName, CmdLine, ExitCode, ExitTime);
             
             var handler = Exited;
             if (handler != null)
@@ -356,6 +361,49 @@ namespace SlavaGu.ConsoleAppLauncher
         ~ConsoleApp()
         {
             Dispose(false);
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+                throw new ObjectDisposedException("Object was disposed.");
+        }
+
+        #endregion
+
+
+        #region Static utility methods
+
+        public class Result
+        {
+            public int ExitCode;
+            public string Output;
+        }
+
+        /// <summary>
+        /// Run console app synchronously and capture all its output including standard error stream.
+        /// </summary>
+        /// <param name="fileName">File name or DOS command</param>
+        /// <param name="cmdLine">Command-line arguments</param>
+        /// <returns>Execution result</returns>
+        public static Result Run(string fileName, string cmdLine = null)
+        {
+            using (var app = new ConsoleApp(fileName, cmdLine))
+            {
+                var outputStringBuilder = new StringBuilder();
+                app.ConsoleOutput += (o, args) => outputStringBuilder.AppendLine(args.Line);
+                
+                app.Run();
+                app.WaitForExit();
+                
+                var result = new Result
+                {
+                    ExitCode = app.ExitCode.GetValueOrDefault(), 
+                    Output = outputStringBuilder.ToString()
+                };
+
+                return result;
+            }
         }
 
         #endregion
