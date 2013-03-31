@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/slavagu/ConsoleAppLauncher</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Added option to use Ctrl-C or Ctrl-Break key to stop console application</releaseNotes>
+    <releaseNotes>Added static Run method to start the console and get full output in one call. Improved comments and traces. Added samples project. </releaseNotes>
     <copyright>Copyright 2013 Slava Guzenko</copyright>
     <tags>Console Ngen</tags>
   </metadata>
