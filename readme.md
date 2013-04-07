@@ -2,7 +2,11 @@
 
 ConsoleAppLauncher is a Windows Console Application wrapper for .NET written in C#.
 
-It captures all the output generated in the console and provides simple interface to start and close console application. The ConsoleOutput event is fired every time when a new line is written by the console to standard/error output. The lines are queued and guaranteed to follow the output order.
+It captures all the output generated in the console and provides simple 
+interface to start and close console application. The ConsoleOutput 
+event is fired every time when a new line is written by the console to 
+standard/error output. The lines are queued and guaranteed to follow the 
+output order. 
 
 For rationale [see this SO question](http://stackoverflow.com/questions/186822/capturing-console-output-from-a-net-application-c).
 
@@ -24,7 +28,7 @@ Usage samples are available in the ConsoleAppLauncher.Samples project.
             return match.Success ? match.Groups["addr"].Value : "<undefined>";
         }
 
-        // Run ping.exe asynchronously and return roundtrip times back to the caller in a callback
+        // Run ping.exe asynchronously and return roundtrip times in a callback
         public static void PingUrl(string url, Action<string> replyHandler)
         {
             var regex = new Regex("(time=|Average = )(?<time>.*?ms)", RegexOptions.Compiled);
@@ -53,8 +57,23 @@ Usage samples are available in the ConsoleAppLauncher.Samples project.
 
 This library is released under The MIT License (MIT).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+	Copyright (c) 2013 Slava Guzenko 
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+	Permission is hereby granted, free of charge, to any person obtaining a 
+	copy of this software and associated documentation files (the 
+	"Software"), to deal in the Software without restriction, including 
+	without limitation the rights to use, copy, modify, merge, publish, 
+	distribute, sublicense, and/or sell copies of the Software, and to 
+	permit persons to whom the Software is furnished to do so, subject to 
+	the following conditions: 
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	The above copyright notice and this permission notice shall be included 
+	in all copies or substantial portions of the Software. 
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
