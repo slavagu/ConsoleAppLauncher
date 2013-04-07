@@ -9,7 +9,7 @@
     <licenseUrl>https://github.com/slavagu/ConsoleAppLauncher/blob/master/license.txt</licenseUrl>
     <projectUrl>https://github.com/slavagu/ConsoleAppLauncher</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Windows Console Application wrapper for .NET. It captures all the output generated in the console and provides simple interface to start, show progress, and close console application.</description>
     <releaseNotes>Added static Run method to start the console and get full output in one call. Improved comments and traces. Added samples project. </releaseNotes>
     <copyright>Copyright 2013 Slava Guzenko</copyright>
     <tags>Console Wrapper ConsoleApp ConsoleApplication Process Ngen</tags>
