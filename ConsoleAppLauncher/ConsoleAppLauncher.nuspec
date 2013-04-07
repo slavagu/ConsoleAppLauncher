@@ -12,6 +12,6 @@
     <description>$description$</description>
     <releaseNotes>Added static Run method to start the console and get full output in one call. Improved comments and traces. Added samples project. </releaseNotes>
     <copyright>Copyright 2013 Slava Guzenko</copyright>
-    <tags>Console Ngen</tags>
+    <tags>Console Wrapper ConsoleApp ConsoleApplication Process Ngen</tags>
   </metadata>
 </package>
