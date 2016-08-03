@@ -29,6 +29,9 @@ Usage samples are available in the ConsoleAppLauncher.Samples project.
         }
 
         // Run ping.exe asynchronously and return roundtrip times in a callback
+	// sample call:
+        //    Action<string> action = Console.WriteLine;
+        //    PingUrl("google.com", action);         
         public static void PingUrl(string url, Action<string> replyHandler)
         {
             var regex = new Regex("(time=|Average = )(?<time>.*?ms)", RegexOptions.Compiled);
@@ -43,6 +46,7 @@ Usage samples are available in the ConsoleAppLauncher.Samples project.
                 }
             };
             app.Run();
+            app.WaitForExit();
         }
 
         // Get Windows firewall rule
