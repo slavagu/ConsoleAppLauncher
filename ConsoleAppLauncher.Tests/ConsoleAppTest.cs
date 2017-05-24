@@ -11,9 +11,9 @@ namespace ConsoleAppLauncher.Tests
     [TestFixture]
     public class ConsoleAppTest
     {
-        private static IConsoleApp GetDummyApp(string outputLine, int repeat, int delay, bool unstoppable)
+        private static IConsoleApp GetDummyApp(string outputLine, int repeat, int delay, bool unstoppable, string prompt = null)
         {
-            var cmdLine = string.Format("-output=\"{0}\" -repeat={1} -delay={2} -unstoppable={3}", outputLine, repeat, delay, unstoppable);
+            var cmdLine = string.Format("-output=\"{0}\" -repeat={1} -delay={2} -unstoppable={3} -prompt=\"{4}\"", outputLine, repeat, delay, unstoppable, prompt);
             return new ConsoleApp("DummyConsoleApplication.exe", cmdLine);
         }
 
@@ -116,5 +116,33 @@ namespace ConsoleAppLauncher.Tests
             Assert.IsTrue(actual.Any(), "No output captured");
             Assert.AreNotEqual(repeat, actual.Count(), "App hasn't been stopped");
         }
+
+        [Test]
+        public void should_get_input_redirect()
+        {
+            // Arrange
+            const int repeat = 0;
+            const int delay = 0;
+            const string outputLine = "Line #";
+            const bool unstoppable = false;
+            const string prompt = "Enter anything and press Enter...";
+
+            var app = GetDummyApp(outputLine, repeat, delay, unstoppable, prompt);
+            var expected = new List<string> { prompt, "Hello, World!" };
+            var actual = new List<string>();
+            app.ConsoleOutput += (sender, args) => actual.Add(args.Line);
+
+            // Act
+            app.Run();
+            app.Write("Hello, ");
+            app.WriteLine("World!");
+            var exited = app.WaitForExit(10000);
+
+            // Assert
+            Assert.IsTrue(exited, "App hasn't exited within allowed timeout");
+            Assert.AreEqual(0, app.ExitCode, "Unexpected exit code");
+            Assert.IsTrue(expected.SequenceEqual(actual), "Captured output is not as expected");
+        }
+
     }
 }

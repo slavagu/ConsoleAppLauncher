@@ -61,6 +61,16 @@ namespace SlavaGu.ConsoleAppLauncher
         bool WaitForExit(int millisecondsTimeout = Timeout.Infinite);
 
         /// <summary>
+        /// Writes a string to the console.
+        /// </summary>
+        void Write(string value);
+
+        /// <summary>
+        /// Writes a string followed by a line terminator to the console.
+        /// </summary>
+        void WriteLine(string value);
+
+        /// <summary>
         /// Fires when the console outputs a new line or error.
         /// </summary>
         /// <remarks>The lines are queued and guaranteed to follow the output order</remarks>

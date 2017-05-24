@@ -125,6 +125,30 @@ namespace SlavaGu.ConsoleAppLauncher
         }
 
         /// <summary>
+        /// Writes a string to the console.
+        /// </summary>
+        public void Write(string value)
+        {
+            if (_process == null || _process.HasExited)
+                return;
+
+            Trace.TraceInformation("stdin< {0}", value);
+            _process.StandardInput.Write(value);
+        }
+
+        /// <summary>
+        /// Writes a string followed by a line terminator to the console.
+        /// </summary>
+        public void WriteLine(string value)
+        {
+            if (_process == null || _process.HasExited)
+                return;
+
+            Trace.TraceInformation("stdin< {0} <eol", value);
+            _process.StandardInput.WriteLine(value);
+        }
+
+        /// <summary>
         /// Fires when the app exits.
         /// </summary>
         public event EventHandler<EventArgs> Exited;

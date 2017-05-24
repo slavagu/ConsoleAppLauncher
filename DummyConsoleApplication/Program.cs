@@ -21,19 +21,21 @@ namespace DummyConsoleApplication
             int repeat = 10;
             int delay = 100;
             bool unstoppable = false;
+            string prompt = null;
 
             var optionSet = new OptionSet
             {
-                { "o|output=",  "[required] output line format, e.g. 'Line #', where # is replaced with line number.", s => outputLine = s },
-                { "r|repeat=",  "number of {TIMES} to output the line.", (int v) => repeat = v },
+                { "o|output=", "[required] output line format, e.g. 'Line #', where # is replaced with line number.", s => outputLine = s },
+                { "r|repeat=", "number of {TIMES} to output the line.", (int v) => repeat = v },
                 { "d|delay=", "number of milliseconds to {DELAY} between lines.", (int v) => delay = v },
                 { "u|unstoppable=", "flag to ignore cancellation via Ctrl-Break.", (bool v) => unstoppable = v },
+                { "p|prompt=", "prompt to ask for user input.", s => prompt = s },
             };
 
             try
             {
                 optionSet.Parse(args);
-                
+
                 if (outputLine == null)
                     throw new OptionException("Required parameter is missing", "output");
             }
@@ -72,6 +74,14 @@ namespace DummyConsoleApplication
                     Environment.Exit((int)ExitCode.Unexpected);
                 }
             };
+
+            if (!string.IsNullOrEmpty(prompt))
+            {
+                Console.WriteLine(prompt);
+                char ch = (char)Console.Read();
+                string str = Console.ReadLine();
+                Console.WriteLine("{0}{1}", ch, str);
+            }
 
             for (int i = 1; i <= repeat; i++)
             {
