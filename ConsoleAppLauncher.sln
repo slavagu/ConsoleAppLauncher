@@ -1,12 +1,14 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppLauncher", "ConsoleAppLauncher\ConsoleAppLauncher.csproj", "{92D1E382-4A58-4458-9DFF-43E6C504FA0F}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppLauncher.Tests", "ConsoleAppLauncher.Tests\ConsoleAppLauncher.Tests.csproj", "{2C4C68E7-CAFF-45FF-81E0-998724E63E78}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1DFE3034-7ABE-4AD1-ACFA-AEC9484A84F0}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		build.bat = build.bat
 		build_release.bat = build_release.bat
 		ConsoleAppLauncher\ConsoleAppLauncher.nuspec = ConsoleAppLauncher\ConsoleAppLauncher.nuspec
@@ -28,10 +30,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{93B03F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppLauncher.Samples", "ConsoleAppLauncher.Samples\ConsoleAppLauncher.Samples.csproj", "{E752D3D4-9A35-404F-9A03-308115D93A11}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppLauncher", "ConsoleAppLauncher\ConsoleAppLauncher.csproj", "{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = ConsoleAppLauncher.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -41,16 +42,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{92D1E382-4A58-4458-9DFF-43E6C504FA0F}.Release|x86.ActiveCfg = Release|Any CPU
 		{2C4C68E7-CAFF-45FF-81E0-998724E63E78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C4C68E7-CAFF-45FF-81E0-998724E63E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C4C68E7-CAFF-45FF-81E0-998724E63E78}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -81,8 +72,26 @@ Global
 		{E752D3D4-9A35-404F-9A03-308115D93A11}.Release|Mixed Platforms.Build.0 = Release|x86
 		{E752D3D4-9A35-404F-9A03-308115D93A11}.Release|x86.ActiveCfg = Release|x86
 		{E752D3D4-9A35-404F-9A03-308115D93A11}.Release|x86.Build.0 = Release|x86
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Debug|x86.Build.0 = Debug|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{5E94F4C6-DB44-423A-A4CC-2C6D9F3684A1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1F618BE7-9E06-4B2F-AAEF-619779F0C8EF}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = ConsoleAppLauncher.vsmdi
 	EndGlobalSection
 EndGlobal
