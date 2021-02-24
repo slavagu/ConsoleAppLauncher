@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using NUnit.Framework;
 using SlavaGu.ConsoleAppLauncher;
@@ -14,7 +16,8 @@ namespace ConsoleAppLauncher.Tests
         private static IConsoleApp GetDummyApp(string outputLine, int repeat, int delay, bool unstoppable, string prompt = null)
         {
             var cmdLine = string.Format("-output=\"{0}\" -repeat={1} -delay={2} -unstoppable={3} -prompt=\"{4}\"", outputLine, repeat, delay, unstoppable, prompt);
-            return new ConsoleApp("DummyConsoleApplication.exe", cmdLine);
+            var currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return new ConsoleApp(Path.Combine(currentDirectory, "DummyConsoleApplication.exe"), cmdLine);
         }
 
         [Test]
