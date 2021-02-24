@@ -2,10 +2,11 @@
 pushd %~dp0
 
 set BUILD_CONFIG=Release
-call build.bat
+rem call build.bat
 
 echo Creating NuGet package...
-.nuget\NuGet.exe pack ConsoleAppLauncher\ConsoleAppLauncher.csproj -OutputDirectory PublishedPackages -Prop Configuration=%BUILD_CONFIG% -Symbols -Verbosity detailed
+rem .nuget\NuGet.exe pack ConsoleAppLauncher\ConsoleAppLauncher.csproj -OutputDirectory PublishedPackages -Prop Configuration=%BUILD_CONFIG% -Symbols -Verbosity detailed
+dotnet pack -c %BUILD_CONFIG% ConsoleAppLauncher/ConsoleAppLauncher.csproj -o PublishedPackages
 
 echo Done.
 popd
