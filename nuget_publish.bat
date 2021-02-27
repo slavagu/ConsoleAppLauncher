@@ -1,11 +1,8 @@
 @echo off
 pushd %~dp0
 
-set NUGET_PACKAGE=%1
-if not exist %NUGET_PACKAGE% echo Could not find NuGet package %NUGET_PACKAGE% & goto exit
-
 echo Pushing NuGet package to nuget.org...
-.nuget\NuGet.exe push %NUGET_PACKAGE% -Verbosity detailed
+dotnet nuget push %1 --api-key %2 --source https://api.nuget.org/v3/index.json
 
 :exit
 echo Done.
