@@ -10,23 +10,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		build.bat = build.bat
-		build_release.bat = build_release.bat
-		ConsoleAppLauncher\ConsoleAppLauncher.nuspec = ConsoleAppLauncher\ConsoleAppLauncher.nuspec
 		license.txt = license.txt
-		nuget_create.bat = nuget_create.bat
-		nuget_publish.bat = nuget_publish.bat
+		publish.bat = publish.bat
 		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyConsoleApplication", "DummyConsoleApplication\DummyConsoleApplication.csproj", "{D4694E4B-E8C9-42BA-9566-70CA8BE11F58}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{93B03F2E-1973-4341-9A85-EDDA196F9F24}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppLauncher.Samples", "ConsoleAppLauncher.Samples\ConsoleAppLauncher.Samples.csproj", "{E752D3D4-9A35-404F-9A03-308115D93A11}"
 EndProject
