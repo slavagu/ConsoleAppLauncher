@@ -12,10 +12,10 @@ namespace SlavaGu.ConsoleAppLauncher
         private Process _process;
         private AutoResetEvent _processEvent;
         private ConcurrentQueue<ConsoleOutputEventArgs> _consoleOutputQueue;
-        
+
         private Task _processMonitor;
         private CancellationTokenSource _cancellationTokenSource;
-        
+
         private readonly object _stateLock = new object();
         private readonly Win32.ConsoleCtrlEventHandler _consoleCtrlEventHandler;
 
@@ -28,7 +28,7 @@ namespace SlavaGu.ConsoleAppLauncher
         {
             FileName = fileName;
             CmdLine = cmdLine;
-            
+
             _consoleCtrlEventHandler += ConsoleCtrlHandler;
         }
 
@@ -53,12 +53,12 @@ namespace SlavaGu.ConsoleAppLauncher
         public int? ExitCode { get; private set; }
 
         /// <summary>
-        /// Time the app has exited.
+        /// Timestamp the app has exited at.
         /// </summary>
         public DateTime? ExitTime { get; private set; }
 
         /// <summary>
-        /// Start the app.
+        /// Starts the app.
         /// </summary>
         public void Run()
         {
@@ -79,7 +79,18 @@ namespace SlavaGu.ConsoleAppLauncher
         }
 
         /// <summary>
-        /// Stop the app.
+        /// Starts the app and awaits until exit.
+        /// </summary>
+        public async Task RunAsync()
+        {
+            Run();
+
+            Trace.TraceInformation("Awaiting app exit");
+            await _processMonitor;
+        }
+
+        /// <summary>
+        /// Stops the app.
         /// </summary>
         /// <param name="closeKey">Special key to send to close the app [default=Ctrl-C]</param>
         /// <param name="forceCloseMillisecondsTimeout">Timeout to wait before closing the app forcefully [default=infinite]</param>
@@ -97,13 +108,13 @@ namespace SlavaGu.ConsoleAppLauncher
 
                 State = AppState.Exiting;
 
-                Task.Factory.StartNew(() => CloseConsole(closeKey, forceCloseMillisecondsTimeout), 
+                Task.Factory.StartNew(() => CloseConsole(closeKey, forceCloseMillisecondsTimeout),
                     TaskCreationOptions.LongRunning);
             }
         }
 
         /// <summary>
-        /// Wait until the app exits.
+        /// Waits until the app exits.
         /// </summary>
         /// <param name="millisecondsTimeout">Timeout to wait until the app is exited [default=infinite]</param>
         /// <returns>True if exited or False if timeout elapsed</returns>
@@ -214,7 +225,7 @@ namespace SlavaGu.ConsoleAppLauncher
         private void MonitoringHandler(object obj)
         {
             var cancellationToken = (CancellationToken)obj;
-            var supportedEvents = new [] { _processEvent, cancellationToken.WaitHandle };
+            var supportedEvents = new[] { _processEvent, cancellationToken.WaitHandle };
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -348,9 +359,9 @@ namespace SlavaGu.ConsoleAppLauncher
 
         protected virtual void OnExited(EventArgs e)
         {
-            Trace.TraceInformation("App exited: '{0} {1}', ExitCode={2}, ExitTime='{3}'", 
+            Trace.TraceInformation("App exited: '{0} {1}', ExitCode={2}, ExitTime='{3}'",
                 FileName, CmdLine, ExitCode, ExitTime);
-            
+
             var handler = Exited;
             if (handler != null)
                 handler(this, e);
@@ -405,7 +416,7 @@ namespace SlavaGu.ConsoleAppLauncher
         }
 
         /// <summary>
-        /// Run console app synchronously and capture all its output including standard error stream.
+        /// Runs console app synchronously and captures all its output including standard error stream.
         /// </summary>
         /// <param name="fileName">File name or DOS command</param>
         /// <param name="cmdLine">Command-line arguments</param>
@@ -416,13 +427,41 @@ namespace SlavaGu.ConsoleAppLauncher
             {
                 var outputStringBuilder = new StringBuilder();
                 app.ConsoleOutput += (o, args) => outputStringBuilder.AppendLine(args.Line);
-                
+
                 app.Run();
                 app.WaitForExit();
-                
+
                 var result = new Result
                 {
-                    ExitCode = app.ExitCode.GetValueOrDefault(), 
+                    ExitCode = app.ExitCode.GetValueOrDefault(),
+                    Output = outputStringBuilder.ToString()
+                };
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Runs console app asynchronously and captures all its output including standard error stream.
+        /// </summary>
+        /// <param name="fileName">File name or DOS command</param>
+        /// <param name="cmdLine">Command-line arguments</param>
+        /// <returns>Execution result</returns>
+        public static async Task<Result> RunAsync(string fileName, string cmdLine = null)
+        {
+            using (var app = new ConsoleApp(fileName, cmdLine))
+            {
+                var outputStringBuilder = new StringBuilder();
+                app.ConsoleOutput += (o, args) =>
+                {
+                    outputStringBuilder.AppendLine(args.Line);
+                };
+
+                await app.RunAsync();
+
+                var result = new Result
+                {
+                    ExitCode = app.ExitCode.GetValueOrDefault(),
                     Output = outputStringBuilder.ToString()
                 };
 

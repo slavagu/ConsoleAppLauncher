@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net4;net45;net5;netcoreapp3.1;netstandard21</TargetFrameworks>
+    <TargetFrameworks>net45;net5;netcoreapp3.1;netstandard21</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>ConsoleAppLauncher</PackageId>
     <Authors>Slava Guzenko</Authors>

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SlavaGu.ConsoleAppLauncher;
 
@@ -143,6 +144,28 @@ namespace ConsoleAppLauncher.Tests
 
             // Assert
             Assert.IsTrue(exited, "App hasn't exited within allowed timeout");
+            Assert.AreEqual(0, app.ExitCode, "Unexpected exit code");
+            Assert.IsTrue(expected.SequenceEqual(actual), "Captured output is not as expected");
+        }
+
+        [Test]
+        public async Task should_await_async_run()
+        {
+            // Arrange
+            const int repeat = 10;
+            const int delay = 100;
+            const string outputLine = "Line #";
+            const bool unstoppable = false;
+
+            var app = GetDummyApp(outputLine, repeat, delay, unstoppable);
+            var expected = Enumerable.Range(1, repeat).Select(i => outputLine.Replace("#", i.ToString(CultureInfo.InvariantCulture))).ToArray();
+            var actual = new List<string>();
+            app.ConsoleOutput += (sender, args) => actual.Add(args.Line);
+
+            // Act
+            await app.RunAsync();
+
+            // Assert
             Assert.AreEqual(0, app.ExitCode, "Unexpected exit code");
             Assert.IsTrue(expected.SequenceEqual(actual), "Captured output is not as expected");
         }

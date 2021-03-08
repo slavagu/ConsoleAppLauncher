@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SlavaGu.ConsoleAppLauncher
 {
@@ -37,24 +38,29 @@ namespace SlavaGu.ConsoleAppLauncher
         int? ExitCode { get; }
 
         /// <summary>
-        /// Timestamp the app has exited.
+        /// Timestamp the app has exited at.
         /// </summary>
         DateTime? ExitTime { get; }
 
         /// <summary>
-        /// Start the app.
+        /// Starts the app.
         /// </summary>
         void Run();
 
         /// <summary>
-        /// Stop the app.
+        /// Starts the app and awaits until exit.
+        /// </summary>
+        Task RunAsync();
+
+        /// <summary>
+        /// Stops the app.
         /// </summary>
         /// <param name="closeKey">Special key to send to close the app [default=Ctrl-C]</param>
         /// <param name="forceCloseMillisecondsTimeout">Timeout to wait before closing the app forcefully [default=infinite]</param>
         void Stop(ConsoleSpecialKey closeKey = ConsoleSpecialKey.ControlC, int forceCloseMillisecondsTimeout = Timeout.Infinite);
 
         /// <summary>
-        /// Wait until the app exits.
+        /// Waits until the app exits.
         /// </summary>
         /// <param name="millisecondsTimeout">Timeout to wait until the app is exited [default=infinite]</param>
         /// <returns>True if exited or False if timeout elapsed</returns>

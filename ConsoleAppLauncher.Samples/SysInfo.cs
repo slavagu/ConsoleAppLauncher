@@ -30,20 +30,22 @@ namespace SlavaGu.ConsoleAppLauncher.Samples
         /// </summary>
         /// <param name="url"></param>
         /// <param name="replyHandler"></param>
-        public static void PingUrl(string url, Action<string> replyHandler)
+        public static async void PingUrl(string url, Action<string> replyHandler)
         {
             var regex = new Regex("(time=|Average = )(?<time>.*?ms)", RegexOptions.Compiled);
-            var app = new ConsoleApp("ping", url);
-            app.ConsoleOutput += (o, args) =>
+            using (var app = new ConsoleApp("ping", "-t " + url))
             {
-                var match = regex.Match(args.Line);
-                if (match.Success)
+                app.ConsoleOutput += (o, args) =>
                 {
-                    var roundtripTime = match.Groups["time"].Value;
-                    replyHandler(roundtripTime);
-                }
-            };
-            app.Run();
+                    var match = regex.Match(args.Line);
+                    if (match.Success)
+                    {
+                        var roundtripTime = match.Groups["time"].Value;
+                        replyHandler(roundtripTime);
+                    }
+                };
+                await app.RunAsync();
+            }
         }
 
         /// <summary>
